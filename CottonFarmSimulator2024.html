@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+body {
+    background-image: url("https://sourcingjournal.com/wp-content/uploads/2022/09/cotton-1.jpg?w=1440&h=810&crop=1");
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+h1, h2, h3 {
+    color: lightblue;
+
+}
+
+p, h4, h5, h6 {
+    color: aliceblue;
+}
+
+a {
+    background-color: lightblue;
+    color: black;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+img {
+    border-radius: 8px;
+}
+
+.center {
+    margin: auto;
+    width: fit-content;
+    padding: 32px;
+    border-radius: 16px;
+    background-color: rgb(20, 20, 100);
+}
+
+.subdiv {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 2px;
+}
+    </style>
+    <title>Slavery Simulator</title>
+</head>
+<body>
+    <div class="center">
+        <h1>Welcome to Slavery Simulator 2024</h1>
+        <p>Tutorial: Click and Buy!</p>
+        <!--
+        <a class="click" href="https://google.com/">Google</a>
+        <a class="click" href="https://yandex.kz/">Yandex</a>
+        -->
+        <div class="subdiv">
+            <div>
+                <a class="click" href="" id="clicker">👆Clicker👆</a>
+                <a class="click" id="buy">Buy (10 clicks)</a>
+                <h3 id="clickerText">Total Click Count: ?</h3>
+                <h3 id="inventory">You have: Nothing</h3>
+                <a class="click" id="sell">Sell for 5 clicks</a>
+            </div>
+        </div>
+        <br>
+        <div class="subdiv">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF6aI_CkDt60FZR8Zw3nz4SlJ0eg3qokxpdg&s" alt="Cotton Farm Image">
+            <a class="click" id="collect">Collect 0 coins</a>
+        </div>
+        <br><br><br>
+        <a id="like" class="click">Click to Like Game</a>
+        <br>
+        <h5>Made by Dersty. Racism is bad</h5>
+    </div>
+
+    <script>
+        const clicks = document.getElementsByClassName("click");
+
+const hoverColor = "aliceblue";
+const clickColor = "blue";
+const defaultColor = "lightblue";
+
+Array.from(clicks).forEach(element => {
+    element.addEventListener('mouseenter', () => {
+        element.style.backgroundColor = hoverColor; // Change to your desired color
+    });
+
+    element.addEventListener('mousedown', () => {
+        element.style.backgroundColor = clickColor; // Change to your desired color
+    });
+
+    element.addEventListener('mouseup', () => {
+        element.style.backgroundColor = defaultColor; // Revert to original color
+    });
+
+    element.addEventListener('mouseleave', () => {
+        element.style.backgroundColor = defaultColor; // Revert to original color if mouse leaves element
+    });
+});
+
+
+// Get the query string from the URL
+const queryString = window.location.search;
+// Parse the query string
+const urlParams = new URLSearchParams(queryString);
+// Retrieve specific parameters
+const clickCount = urlParams.get('clicks') || 0;
+
+const textElement = document.getElementById('clickerText');
+
+textElement.innerHTML = "Total Click Count: "+clickCount
+
+
+const clicker = document.getElementById('clicker');
+
+// Get the current URL
+const currentUrl = new URL(window.location.href);
+// Get the current value of the parameter 'count' (default to 0 if it doesn't exist)
+let count = parseInt(currentUrl.searchParams.get('clicks')) || 0;
+let haveBuyElement = parseInt(currentUrl.searchParams.get('buy')) || 0;
+// Increment the count by 1
+count += 1;
+// Update the URL parameter
+currentUrl.searchParams.set('clicks', count);
+// Reload the page with the updated URL
+clicker.href = currentUrl.toString();
+
+if (haveBuyElement != 0) {
+    const buyText = document.getElementById("inventory")
+    buyText.innerHTML = "You have: Nigga ("+haveBuyElement+"x)"
+}
+
+const buy = document.getElementById('buy')
+const sell = document.getElementById('sell')
+const collect = document.getElementById('collect')
+
+const buyPrice = 10+(haveBuyElement*2)
+const sellPrice = Math.max(5,Math.floor(buyPrice/2))
+
+const likeBtn = document.getElementById("like")
+
+let cottonCollect = 0
+
+buy.innerHTML = "Buy ("+buyPrice+" clicks)"
+sell.innerHTML = "Sell for "+sellPrice+" clicks per item"
+
+buy.addEventListener("click",() => {
+    if (clickCount >= buyPrice) {
+        const currentUrl = new URL(window.location.href);
+        // Get the current value of the parameter 'count' (default to 0 if it doesn't exist)
+        let count = parseInt(currentUrl.searchParams.get('clicks')) || 0;
+        // Increment the count by 1
+        count -= buyPrice;
+        // Update the URL parameter
+        currentUrl.searchParams.set('clicks', count);
+        currentUrl.searchParams.set('buy', haveBuyElement+1);
+        // Reload the page with the updated URL
+        window.location.href = currentUrl.toString();
+    }
+})
+
+sell.addEventListener("click", ()=>{
+    if (haveBuyElement > 0) {
+        const currentUrl = new URL(window.location.href);
+        // Get the current value of the parameter 'count' (default to 0 if it doesn't exist)
+        let count = parseInt(currentUrl.searchParams.get('clicks')) || 0;
+        // Increment the count by 1
+        count += sellPrice;
+        // Update the URL parameter
+        currentUrl.searchParams.set('clicks', count);
+        currentUrl.searchParams.set('buy', haveBuyElement-1);
+        // Reload the page with the updated URL
+        window.location.href = currentUrl.toString();
+    }
+})
+
+collect.addEventListener("click", () => {
+    const currentUrl = new URL(window.location.href);
+    // Get the current value of the parameter 'count' (default to 0 if it doesn't exist)
+    let count = parseInt(currentUrl.searchParams.get('clicks')) || 0;
+    // Increment the count by 1
+    count += cottonCollect;
+    // Update the URL parameter
+    currentUrl.searchParams.set('clicks', count);
+    // Reload the page with the updated URL
+    window.location.href = currentUrl.toString();
+})
+
+likeBtn.addEventListener("click",()=>{
+    likeBtn.innerHTML = "❤️ Liked!"
+})
+
+function farmLoop() {
+    cottonCollect+=haveBuyElement
+    collect.innerHTML = "Collect "+cottonCollect+" coins"
+}
+
+function myLoop() {         //  create a loop function
+    setTimeout(function() {   //  call a 3s setTimeout when the loop is called
+        farmLoop()
+        myLoop();             //  ..  again which will trigger another 
+    }, 3000)
+  }
+  
+  myLoop();     
+    </script>
+</body>
+</html>
